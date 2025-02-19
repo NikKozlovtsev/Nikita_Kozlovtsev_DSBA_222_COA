@@ -1,0 +1,13 @@
+erDiagram
+    USER {
+      string id PK "Идентификатор пользователя"
+      string username "Имя пользователя"
+      string email "Email пользователя"
+      string passwordHash "Хэш пароля"
+      datetime createdAt "Дата создания аккаунта"
+    }
+    ROLE {
+      string id PK "Идентификатор роли"
+      string name "Название роли"
+    }
+    USER ||--|{ ROLE : "имеет"

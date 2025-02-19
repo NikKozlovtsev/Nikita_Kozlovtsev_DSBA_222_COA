@@ -1,0 +1,98 @@
+specification {
+  element actor
+  element system
+  element container
+}
+
+model {
+  user = actor 'Пользователь' {
+    description 'пользователь социальной сети'
+    technology 'Mobile App и Web UI'
+  }
+  socialNetwork = system 'Social Network System' {
+    description 'система социальной сети'
+    technology 'HTTP_or_HTTPS/REST'
+
+    gateway = container 'Gateway API' {
+      description 'вход для всех запросов UI'
+      technology 'Node.js / Express'
+    }
+    userService = container 'User Service' {
+      description 'Управляет данными пользователей и регистрацией/аутентификацией'
+      technology 'Python /Flask'
+    }
+    postService = container 'Post Service' {
+      description 'обработка crud-a постов,промокодов и прочего'
+      technology 'Java'
+    }
+    statsService = container 'Statistics Service' {
+      description 'Подсчитывает лайки и просмотры также стата'
+      technology 'Go'
+    }
+    messageBroker = container 'Message Broker' {
+      description 'Посредник для асинхронной передачи сообщений'
+      technology 'Kafka'
+    }
+    userDb = container 'PostgreSQL Users DB' {
+      description 'База данных пользаков'
+      technology 'PostgreSQL'
+    }
+    postDb = container 'Postgres/Cassandra Posts DB' {
+      description 'БД для хранения постов, комментариев'
+      technology 'PostgreSQL/Cassandra'
+    }
+    statsDb = container 'ClickHouse Stats DB' {
+      description 'Хранилище статистики по лайкам, просмотрам и комменты'
+      technology 'ClickHouse'
+    }
+    gateway -> userService 'Отправляет запросы для регистрации, логина' {
+      technology 'REST'
+    }
+    gateway -> postService 'Запросы на создание, обновление, удаление' {
+      technology 'REST'
+    }
+    gateway -> statsService 'Запросы на получение статистики постов' {
+      technology 'REST'
+    }
+
+    postService -> messageBroker 'Отправляет события о новых постах' {
+      technology 'Kafka/RabbitMQ'
+    }
+    messageBroker -> statsService 'Передаёт события лайки, просмотры, комментарии' {
+  technology 'Kafka/RabbitMQ'
+}
+    gateway -> messageBroker 'Отправляет события о просмотрах, лайках' {
+      technology 'Kafka/RabbitMQ'
+    }
+
+    statsService -> statsDb 'Сохраняет/читает статистику'
+    userService -> userDb 'Сохраняет/читает данные пользователей'
+    postService -> postDb 'Сохраняет/читает посты и комментарии'
+  }
+
+  user -> socialNetwork.gateway 'Использует для создания постов, регистрации, просмотра  и прочего' {
+    technology 'HTTP/REST'
+  }
+}
+views {
+  view context {
+    title 'Социальная сеть — Context Diagram'
+    include user
+    include socialNetwork
+  }
+
+  
+  view containers {
+    title 'Социальная сеть — Container Diagram'
+    
+    
+    include socialNetwork/gateway
+    include socialNetwork/userService
+    include socialNetwork/postService
+    include socialNetwork/statsService
+    include socialNetwork/messageBroker
+    include socialNetwork/userDb
+    include socialNetwork/postDb
+    include socialNetwork/statsDb
+  }
+}

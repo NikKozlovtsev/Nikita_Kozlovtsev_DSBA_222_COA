@@ -1,0 +1,24 @@
+erDiagram
+    POST {
+      string id PK 
+      string title 
+      string content 
+      string userId 
+      datetime createdAt 
+      datetime updatedAt 
+    }
+    COMMENT {
+      string id PK 
+      string content 
+      string userId 
+      string postId 
+      datetime createdAt 
+    }
+    PROMO_CODE {
+      string id PK 
+      string code
+      int discount 
+      datetime validFrom
+      datetime validTo
+    }
+    POST ||--o{ COMMENT :

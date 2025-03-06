@@ -1,0 +1,117 @@
+openapi: 3.0.0
+info:
+  title: User Service API
+  version: "1.0"
+paths:
+  /users/register:
+    post:
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                date_of_birth:
+                  type: string
+                  format: date
+                phone:
+                  type: string
+              required:
+                - login
+                - password
+                - email
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Bad Request
+  /users/login:
+    post:
+      summary: User login
+      operationId: userLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+              required:
+                - login
+                - password
+      responses:
+        '200':
+          description: Login successful, returns access token
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+  /users/profile:
+    get:
+      summary: Get user profile
+      operationId: getProfile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Returns user profile data
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+    put:
+      summary: Update user profile
+      operationId: updateProfile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                date_of_birth:
+                  type: string
+                  format: date
+                phone:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Profile updated successfully
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

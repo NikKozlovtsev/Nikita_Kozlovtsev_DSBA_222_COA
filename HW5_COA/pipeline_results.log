@@ -1,0 +1,7 @@
+=== 1) Register new user…
+{
+  "message": "User registered successfully"
+}
+
+=== 2) Login and get JWT…
+ERROR: did not receive token, aborting

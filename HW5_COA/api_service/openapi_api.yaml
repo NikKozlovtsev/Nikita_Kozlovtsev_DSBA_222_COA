@@ -1,0 +1,22 @@
+openapi: 3.0.0
+info:
+  title: Post Service API (gateway)
+  version: "1.0"
+paths:
+  /posts:
+    post:
+      summary: Create post
+      ...
+    get:
+      summary: List posts
+      ...
+  /posts/{id}:
+    get:
+      summary: Get post by ID
+      ...
+    put:
+      summary: Update post
+      ...
+    delete:
+      summary: Delete post
+      ...

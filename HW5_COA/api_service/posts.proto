@@ -1,0 +1,96 @@
+syntax = "proto3";
+package postservice;
+
+import "google/protobuf/empty.proto";
+
+// Сущность Post
+message Post {
+  string id          = 1;
+  string title       = 2;
+  string description = 3;
+  string creatorId   = 4;
+  bool isPrivate     = 5;
+  repeated string tags       = 6;
+  string createdAt   = 7;
+  string updatedAt   = 8;
+}
+
+// Запрос для Create/Update
+message CreateUpdatePostRequest {
+  string title       = 1;
+  string description = 2;
+  string creatorId   = 3;
+  bool isPrivate     = 4;
+  repeated string tags       = 5;
+}
+
+// Ответ с одним постом
+message PostResponse {
+  Post post = 1;
+}
+
+// Запрос на Get/Delete
+message GetDeletePostRequest {
+  string id = 1;
+}
+
+// Пагинация
+message ListPostsRequest {
+  int32 page     = 1;
+  int32 pageSize = 2;
+}
+message ListPostsResponse {
+  repeated Post posts     = 1;
+  int32 totalCount        = 2;
+}
+
+// Новые типы для view/like/comments
+message ViewLikeRequest {
+  string postId   = 1;
+  string clientId = 2;
+}
+
+message AddCommentRequest {
+  string postId   = 1;
+  string clientId = 2;
+  string content  = 3;
+}
+
+message Comment {
+  string id        = 1;
+  string postId    = 2;
+  string clientId  = 3;
+  string content   = 4;
+  string createdAt = 5;
+}
+
+message CommentResponse {
+  Comment comment = 1;
+}
+
+message ListCommentsRequest {
+  string postId    = 1;
+  int32 page       = 2;
+  int32 pageSize   = 3;
+}
+
+message ListCommentsResponse {
+  repeated Comment comments   = 1;
+  int32 totalCount            = 2;
+}
+
+service PostService {
+  // CRUD
+  rpc CreatePost(CreateUpdatePostRequest) returns (PostResponse);
+  rpc GetPost(GetDeletePostRequest)       returns (PostResponse);
+  rpc UpdatePost(CreateUpdatePostRequest) returns (PostResponse);
+  rpc DeletePost(GetDeletePostRequest)    returns (PostResponse);
+  rpc ListPosts(ListPostsRequest)         returns (ListPostsResponse);
+
+  // Новые методы
+  rpc ViewPost(ViewLikeRequest)           returns (PostResponse);
+  rpc LikePost(ViewLikeRequest)           returns (PostResponse);
+  rpc AddComment(AddCommentRequest)       returns (CommentResponse);
+  rpc ListComments(ListCommentsRequest)   returns (ListCommentsResponse);
+
+}

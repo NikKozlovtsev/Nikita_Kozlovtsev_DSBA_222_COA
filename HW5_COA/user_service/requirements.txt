@@ -1,0 +1,8 @@
+fastapi==0.95.2
+uvicorn==0.21.1
+sqlalchemy==1.4.46
+psycopg2-binary==2.9.5
+passlib==1.7.4
+pyjwt==2.6.0
+pydantic[email]==1.10.7
+kafka-python>=2.0.2
